@@ -40,6 +40,8 @@ Traditional customer support bots are passive: they classify tickets, summarize 
 
 ## 🏗️ System Architecture
 
+> This diagram reflects the intended production architecture. In the current demo build, the replanning decision inside the Agent Core is deterministic (see note in [Configuration](#-configuration)) to keep live demonstrations repeatable; the tool layer, policy engine, and verification loop shown below are fully implemented and exercised in every request.
+
 ```
 [ Customer Request ]
         │
@@ -83,7 +85,8 @@ Traditional customer support bots are passive: they classify tickets, summarize 
 | Frontend            | Responsive dual-panel dashboard (Vanilla HTML5, CSS3, JavaScript) |
 | Backend API         | FastAPI (async Python framework)                                  |
 | API Standard        | OpenAPI 3.0 / Swagger interactive documentation                   |
-| Agent Framework     | Closed-loop ReAct orchestration engine with tool-calling abstraction |
+| Agent Framework     | Closed-loop ReAct-style tool-calling & replanning orchestration   |
+| LLM                 | Gemini 3.8 Flash (via `google-genai`)                       |
 | Data Persistence    | In-memory enterprise state simulation with consistent, transactional state updates |
 
 ---
@@ -92,13 +95,13 @@ Traditional customer support bots are passive: they classify tickets, summarize 
 
 ### Prerequisites
 - Python 3.9+ installed on your system.
-- An API key for your chosen LLM provider (see [Configuration](#-configuration) below).
+- A Google AI Studio API key for Gemini (see [Configuration](#-configuration) below).
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo-name>.git
-cd <your-repo-name>
+git clone https://github.com/rohandas6555-ship-it/ResolvAI.git
+cd ResolvAI
 ```
 
 ### 2. Install Dependencies
@@ -107,17 +110,30 @@ cd <your-repo-name>
 pip install -r requirements.txt
 ```
 
-(Or manually: `pip install fastapi uvicorn pydantic`)
+Minimum required packages:
+
+```
+fastapi
+uvicorn
+pydantic
+google-genai
+python-dotenv
+```
+
+> This project uses Google's **Gemini 3.8 Flash** model via the `google-genai` SDK, loaded from `.env` using `python-dotenv`.
 
 ### 3. Configure Environment Variables
 
 Create a `.env` file in the project root:
 
 ```env
-LLM_PROVIDER=openai        # or anthropic, azure, etc.
-LLM_API_KEY=your_api_key_here
-LLM_MODEL=gpt-4o           # or your preferred model
+LLM_PROVIDER=google
+LLM_API_KEY=AIzaSyxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+LLM_MODEL=gemini-3.8-flash
+PORT=8000
 ```
+
+> ⚠️ Never commit your real API key to the repository. Keep `.env` in `.gitignore` and only share `AIzaSy...` style placeholders in documentation.
 
 ### 4. Start the Application
 
@@ -133,12 +149,14 @@ python main.py
 
 ## ⚙️ Configuration
 
-| Variable       | Description                                  | Required |
-|----------------|-----------------------------------------------|----------|
-| `LLM_PROVIDER` | LLM backend to use (`openai`, `anthropic`, etc.) | Yes      |
-| `LLM_API_KEY`  | API key for the selected provider              | Yes      |
-| `LLM_MODEL`    | Model identifier to use for agent reasoning    | Yes      |
-| `PORT`         | Port to run the FastAPI server on (default: 8000) | No       |
+| Variable       | Description                                  | Required | Value Used in This Project |
+|----------------|-----------------------------------------------|----------|------------------------------|
+| `LLM_PROVIDER` | LLM backend used for agent reasoning          | Yes      | `google`                     |
+| `LLM_API_KEY`  | API key for the Gemini API (used by `google-genai`) | Yes | Your own key (get one at [aistudio.google.com](https://aistudio.google.com)) |
+| `LLM_MODEL`    | Model identifier used for tool-calling & replanning | Yes | `gemini-3.8-flash`           |
+| `PORT`         | Port to run the FastAPI server on              | No       | `8000` (default)             |
+
+> **Hybrid Resolution Note:** `agent_resolve()` (`main.py`) first attempts a **live Gemini 3.8 Flash tool-calling loop** — the model itself inspects the order, checks inventory, and decides whether to replace or replan to a refund, calling the real tool functions each time. If `LLM_API_KEY` is not set, or the live call errors out (timeout, quota, network), the endpoint automatically falls back to an equivalent deterministic Python resolution path, so the demo never fails on stage even without API access. Every request's logs indicate which path was used (`"Resolved via live Gemini 3.8 Flash tool-calling"` vs. the fallback trace).
 
 ---
 
