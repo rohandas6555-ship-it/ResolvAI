@@ -7,7 +7,6 @@
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?style=flat&logo=python)](https://python.org)
 [![OpenAPI](https://img.shields.io/badge/API-OpenAPI%203.0-6BA539.svg?style=flat&logo=swagger)](https://swagger.io/)
 [![Architecture](https://img.shields.io/badge/Agent-Closed--Loop%20ReAct-blueviolet)](#-system-architecture)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#-license)
 
 ---
 
@@ -194,9 +193,3 @@ The sandbox includes interactive toggles to test resolution paths deterministica
 - **Bounded replanning** — the replanning loop is capped at a fixed number of attempts to prevent infinite retry cycles; exceeding the cap triggers escalation.
 - **Tool-call failure handling** — timeouts or malformed responses from a simulated backend are caught and treated as blocked actions, feeding into the same replanning/escalation path as policy blocks.
 - **Threshold-based escalation** — refunds or actions above a configured value automatically route to a human queue rather than executing autonomously.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
