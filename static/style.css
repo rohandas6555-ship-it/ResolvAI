@@ -1,0 +1,55 @@
+:root {
+  --bg: #0f172a;
+  --panel-bg: #1e293b;
+  --border: #334155;
+  --accent: #3b82f6;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --green: #10b981;
+  --yellow: #f59e0b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+
+.top-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 24px; background: var(--panel-bg); border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.badge { background: #6366f1; font-size: 11px; padding: 4px 8px; border-radius: 4px; font-weight: 700; }
+
+.container { display: flex; flex: 1; overflow: hidden; padding: 16px; gap: 16px; }
+.panel {
+  flex: 1; background: var(--panel-bg); border-radius: 10px; border: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.order-badge { font-size: 12px; background: #334155; padding: 3px 8px; border-radius: 4px; }
+
+/* Chat Box */
+.chat-box { flex: 1; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.msg { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
+.msg.bot { background: #334155; align-self: flex-start; }
+.msg.user { background: var(--accent); align-self: flex-end; }
+
+.chat-input-area { display: flex; padding: 12px; gap: 10px; border-top: 1px solid var(--border); }
+input { flex: 1; background: #0f172a; border: 1px solid var(--border); padding: 10px 14px; border-radius: 6px; color: #fff; }
+button { padding: 10px 18px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-secondary { background: #475569; color: #fff; }
+
+/* Live Trace Logs */
+.logs-container { flex: 1; padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.log-card { background: #0f172a; border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 4px; }
+.log-card.replan { border-left-color: var(--yellow); }
+.log-card.verified { border-left-color: var(--green); }
+.log-step { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+pre { font-family: 'Fira Code', monospace; font-size: 12px; color: #38bdf8; background: #090d16; padding: 8px; border-radius: 4px; overflow-x: auto; margin-top: 6px; }
+
+.state-inspector { background: #090d16; padding: 12px 16px; border-top: 1px solid var(--border); height: 130px; }
+.state-inspector h5 { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }

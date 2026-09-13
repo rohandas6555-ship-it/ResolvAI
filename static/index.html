@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autonomous Resolution Agent</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="top-nav">
+    <div class="brand">
+      <span class="badge">Track 3: PS 5</span>
+      <h3>Autonomous Enterprise Resolution Agent</h3>
+    </div>
+    <div class="controls">
+      <button id="toggleStockBtn" class="btn-secondary">Simulate Stock: Out of Stock (0)</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- LEFT PANEL: Customer Interaction -->
+    <div class="panel chat-panel">
+      <div class="panel-header">
+        <h4>Customer Ticket / Chat</h4>
+        <span class="order-badge">Order: #ORD-9901</span>
+      </div>
+      <div class="chat-box" id="chatBox">
+        <div class="msg bot">
+          Hello! How can I assist you with Order <strong>#ORD-9901</strong>?
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="userInput" value="I received a damaged laptop bag. Please replace it!" />
+        <button id="sendBtn" class="btn-primary">Send to Agent</button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Agentic Execution & ReAct Trace -->
+    <div class="panel trace-panel">
+      <div class="panel-header">
+        <h4>Live Agent Reasoning & Action Trace</h4>
+        <span class="pulse-indicator"></span>
+      </div>
+      <div class="logs-container" id="logsContainer">
+        <div class="empty-state">Submit a message to see Agent inspect APIs, replan, and verify state.</div>
+      </div>
+      
+      <!-- Current State Inspector -->
+      <div class="state-inspector">
+        <h5>Current DB State</h5>
+        <pre id="dbStateViewer">{"status": "DELIVERED", "item_id": "ITEM-LAPTOP-BAG"}</pre>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
